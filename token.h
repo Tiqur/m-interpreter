@@ -1,3 +1,8 @@
+#ifndef TOKEN_H
+#include <stdio.h>
+#undef EOF
+#define TOKEN_H
+
 #define ILLEGAL "ILLEGAL"
 #define EOF "EOF"
 
@@ -25,14 +30,11 @@
 
 typedef char* TokenType;
 
-struct Token
+typedef struct Token
 {
   TokenType Type;
   char* Literal; 
-};
-
-int main(void)
-{
-
-  return 0;
 }
+Token;
+
+#endif
