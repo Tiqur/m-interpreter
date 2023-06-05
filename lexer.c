@@ -62,12 +62,11 @@ Token LexerNextToken(Lexer* lexer)
     case '+':
       tok = LexerNewToken(PLUS, &lexer->ch);
     break;
-    case '0':
+    case 0:
       tok.Literal = "";
       tok.Type = EOF;
     break;
   }
-
   return tok;
 }
 
