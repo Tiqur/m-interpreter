@@ -1,6 +1,26 @@
 #include "./token.h"
 #include "lexer.h"
 #include <string.h>
+#include <stdlib.h>
+
+typedef struct {
+  const char* keyword;
+  TokenType tokenType;
+} KeywordMapping;
+
+// This should probably be a hashmap instead of an array
+KeywordMapping keywords[] = {
+  {"fn", FUNCTION},
+  {"let", LET}
+};
+
+TokenType LookupIdent(char* ident)
+{
+  for (int i = 0; i < sizeof(keywords) / sizeof(KeywordMapping); i++)
+    if (strcmp(keywords[i].keyword, ident) == 0)
+      return keywords[i].tokenType;
+  return IDENT;
+}
 
 Lexer CreateNewLexer(char* string)
 {
@@ -24,11 +44,57 @@ void LexerReadChar(Lexer* lexer)
   lexer->readPosition += 1;
 }
 
-Token LexerNewToken(TokenType type, char* literal) {
+Token LexerNewToken(TokenType type, char* literal)
+{
   Token tok;
   tok.Type = type;
   tok.Literal = literal;
   return tok;
+}
+
+int IsLetter(char ch) {
+  return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_';
+}
+
+char* LexerReadIdentifier(Lexer* lexer)
+{
+  int position = lexer->position;
+
+  while(IsLetter(lexer->ch))
+    LexerReadChar(lexer);
+
+  int length = lexer->position - position;
+  char* identifier = (char*)malloc((length+1) * sizeof(char));
+  strncpy(identifier, lexer->input+position, length);
+
+  identifier[length] = '\0';
+  return identifier;
+}
+
+void LexerSkipWhitespace(Lexer* lexer)
+{
+  while (lexer->ch == ' ' || lexer->ch == '\t' || lexer->ch == '\n' || lexer->ch == '\r')
+    LexerReadChar(lexer);
+};
+
+int IsDigit(char ch)
+{
+  return '0' <= ch && ch <= '9';
+}
+
+char* LexerReadNumber(Lexer* lexer)
+{
+  int position = lexer->position;
+
+  while(IsDigit(lexer->ch))
+    LexerReadChar(lexer);
+
+  int length = lexer->position - position;
+  char* identifier = (char*)malloc((length+1) * sizeof(char));
+  strncpy(identifier, lexer->input+position, length);
+
+  identifier[length] = '\0';
+  return identifier;
 }
 
 Token LexerNextToken(Lexer* lexer)
@@ -36,6 +102,7 @@ Token LexerNextToken(Lexer* lexer)
   Token tok;
   
   LexerReadChar(lexer);
+  LexerSkipWhitespace(lexer);
 
   switch (lexer->ch) {
     case '=':
@@ -65,6 +132,25 @@ Token LexerNextToken(Lexer* lexer)
     case 0:
       tok.Literal = "";
       tok.Type = EOF;
+    break;
+    default:
+      if (IsLetter(lexer->ch))
+      {
+        tok.Literal = LexerReadIdentifier(lexer);
+        tok.Type = LookupIdent(tok.Literal);
+        return tok;
+      }
+      else if (IsDigit(lexer->ch))
+      {
+        tok.Literal = LexerReadNumber(lexer);
+        tok.Type = INT;
+        return tok;
+      }
+      else
+      {
+        tok = LexerNewToken(ILLEGAL, &lexer->ch);
+      }
+      
     break;
   }
   return tok;
