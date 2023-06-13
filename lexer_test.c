@@ -17,7 +17,9 @@ void TestNextToken()
                 "let add = fn(x, y) {"
                   "x + y;"
                 "};"
-                "let result = add(five, ten);";
+                "let result = add(five, ten);"
+                "!-/*5;"
+                "5 < 10 > 5;";
 
   Test tests[] =
   {
@@ -56,6 +58,18 @@ void TestNextToken()
     {COMMA, ","},
     {IDENT, "ten"},
     {RPAREN, ")"},
+    {SEMICOLON, ";"},
+    {BANG, "!"},
+    {MINUS, "-"},
+    {SLASH, "/"},
+    {ASTERISK, "*"},
+    {INT, "5"},
+    {SEMICOLON, ";"},
+    {INT, "5"},
+    {LT, "<"},
+    {INT, "10"},
+    {GT, ">"},
+    {INT, "5"},
     {SEMICOLON, ";"},
     {EOF, ""},
   };

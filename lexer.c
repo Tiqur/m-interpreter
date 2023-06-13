@@ -11,7 +11,12 @@ typedef struct {
 // This should probably be a hashmap instead of an array
 KeywordMapping keywords[] = {
   {"fn", FUNCTION},
-  {"let", LET}
+  {"let", LET},
+  {"if", IF},
+  {"else", ELSE},
+  {"return", RETURN},
+  {"true", TRUE},
+  {"false", FALSE}
 };
 
 TokenType LookupIdent(char* ident)
@@ -133,6 +138,24 @@ Token LexerNextToken(Lexer* lexer)
     break;
     case '+':
       tok = LexerNewToken(PLUS, lexer->ch);
+    break;
+    case '-':
+      tok = LexerNewToken(MINUS, lexer->ch);
+    break;
+    case '!':
+      tok = LexerNewToken(BANG, lexer->ch);
+    break;
+    case '*':
+      tok = LexerNewToken(ASTERISK, lexer->ch);
+    break;
+    case '/':
+      tok = LexerNewToken(SLASH, lexer->ch);
+    break;
+    case '<':
+      tok = LexerNewToken(LT, lexer->ch);
+    break;
+    case '>':
+      tok = LexerNewToken(GT, lexer->ch);
     break;
     case 0:
       tok.Literal = "";

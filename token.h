@@ -14,6 +14,12 @@
 // Operators
 #define ASSIGN "="
 #define PLUS "+"
+#define MINUS "-"
+#define BANG "!"
+#define ASTERISK "*"
+#define SLASH "/"
+#define LT "<"
+#define GT ">"
 
 // Delimiters
 #define COMMA ","
@@ -27,6 +33,11 @@
 // Keywords
 #define FUNCTION "FUNCTION"
 #define LET "LET"
+#define IF "IF"
+#define ELSE "ELSE"
+#define RETURN "RETURN"
+#define TRUE "TRUE"
+#define FALSE "FALSE"
 
 
 typedef char* TokenType;
