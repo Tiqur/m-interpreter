@@ -25,7 +25,10 @@ TokenType LookupIdent(char* ident)
 Lexer CreateNewLexer(char* string)
 {
   Lexer l = {
-    string
+    string,
+    0,
+    0,
+    string[0]
   };
   return l;
 };
@@ -44,11 +47,14 @@ void LexerReadChar(Lexer* lexer)
   lexer->readPosition += 1;
 }
 
-Token LexerNewToken(TokenType type, char* literal)
+Token LexerNewToken(TokenType type, char literal)
 {
   Token tok;
   tok.Type = type;
-  tok.Literal = literal;
+  char* str = (char*)malloc(2 * sizeof(char));
+  str[0] = literal;
+  str[1] = '\0';
+  tok.Literal = str;
   return tok;
 }
 
@@ -101,33 +107,32 @@ Token LexerNextToken(Lexer* lexer)
 {
   Token tok;
   
-  LexerReadChar(lexer);
   LexerSkipWhitespace(lexer);
 
   switch (lexer->ch) {
     case '=':
-      tok = LexerNewToken(ASSIGN, &lexer->ch);
+      tok = LexerNewToken(ASSIGN, lexer->ch);
     break;
     case ';':
-      tok = LexerNewToken(SEMICOLON, &lexer->ch);
+      tok = LexerNewToken(SEMICOLON, lexer->ch);
     break;
     case '(':
-      tok = LexerNewToken(LPAREN, &lexer->ch);
+      tok = LexerNewToken(LPAREN, lexer->ch);
     break;
     case ')':
-      tok = LexerNewToken(RPAREN, &lexer->ch);
+      tok = LexerNewToken(RPAREN, lexer->ch);
     break;
     case '{':
-      tok = LexerNewToken(LBRACE, &lexer->ch);
+      tok = LexerNewToken(LBRACE, lexer->ch);
     break;
     case '}':
-      tok = LexerNewToken(RBRACE, &lexer->ch);
+      tok = LexerNewToken(RBRACE, lexer->ch);
     break;
     case ',':
-      tok = LexerNewToken(COMMA, &lexer->ch);
+      tok = LexerNewToken(COMMA, lexer->ch);
     break;
     case '+':
-      tok = LexerNewToken(PLUS, &lexer->ch);
+      tok = LexerNewToken(PLUS, lexer->ch);
     break;
     case 0:
       tok.Literal = "";
@@ -148,11 +153,13 @@ Token LexerNextToken(Lexer* lexer)
       }
       else
       {
-        tok = LexerNewToken(ILLEGAL, &lexer->ch);
+        tok = LexerNewToken(ILLEGAL, lexer->ch);
       }
-      
     break;
   }
+
+  LexerReadChar(lexer);
+
   return tok;
 }
 

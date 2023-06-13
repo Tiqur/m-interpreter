@@ -15,6 +15,6 @@ Lexer;
 
 Lexer CreateNewLexer(char* string);
 void LexerReadChar(Lexer* lexer);
-Token LexerNewToken(TokenType type, char* literal);
+Token LexerNewToken(TokenType type, char literal);
 Token LexerNextToken(Lexer* lexer);
 #endif /* LEXER_H */
