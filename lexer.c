@@ -96,11 +96,11 @@ char* LexerReadNumber(Lexer* lexer)
     LexerReadChar(lexer);
 
   int length = lexer->position - position;
-  char* identifier = (char*)malloc((length+1) * sizeof(char));
-  strncpy(identifier, lexer->input+position, length);
+  char* number = (char*)malloc((length+1) * sizeof(char));
+  strncpy(number, lexer->input+position, length);
 
-  identifier[length] = '\0';
-  return identifier;
+  number[length] = '\0';
+  return number;
 }
 
 Token LexerNextToken(Lexer* lexer)

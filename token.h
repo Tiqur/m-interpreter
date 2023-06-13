@@ -1,6 +1,7 @@
 #ifndef TOKEN_H
 #include <stdio.h>
 #undef EOF
+
 #define TOKEN_H
 
 #define ILLEGAL "ILLEGAL"
